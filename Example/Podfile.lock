@@ -1,0 +1,14 @@
+PODS:
+  - STKWebKitViewController (0.1.9)
+
+DEPENDENCIES:
+  - STKWebKitViewController (from `../`)
+
+EXTERNAL SOURCES:
+  STKWebKitViewController:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  STKWebKitViewController: 79bff7b8fa2d2f532b971d3c1de6a699b7abf05d
+
+COCOAPODS: 0.38.0.beta.2

@@ -75,12 +75,32 @@
 
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    [self addObserver:self forKeyPath:@"webView.title" options:NSKeyValueObservingOptionNew context:NULL];
+    [self addObserver:self forKeyPath:@"webView.loading" options:NSKeyValueObservingOptionNew context:NULL];
+    [self addObserver:self forKeyPath:@"webView.estimatedProgress" options:NSKeyValueObservingOptionNew context:NULL];
+
+    if (self.request) {
+        [self.webView loadRequest:self.request];
+    }
+}
+
+- (void)dealloc
+{
+    [self removeObserver:self forKeyPath:@"webView.title"];
+    [self removeObserver:self forKeyPath:@"webView.loading"];
+    [self removeObserver:self forKeyPath:@"webView.estimatedProgress"];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    NSAssert(self.navigationController, @"STKWebKitViewController needs to be contained in a UINavigationController. If you are presenting STKWebKitViewController modally, use STKModalWebKitViewController instead.");
-    
+
+//    NSAssert(self.navigationController, @"STKWebKitViewController needs to be contained in a UINavigationController. If you are presenting STKWebKitViewController modally, use STKModalWebKitViewController instead.");
+
     [self.view setNeedsUpdateConstraints];
     self.toolbarWasHidden = self.navigationController.isToolbarHidden;
     [self.navigationController setToolbarHidden:NO animated:YES];
@@ -98,13 +118,6 @@
         self.navigationController.navigationBar.barTintColor = self.navigationBarTintColor;
     }
 
-    [self addObserver:self forKeyPath:@"webView.title" options:NSKeyValueObservingOptionNew context:NULL];
-    [self addObserver:self forKeyPath:@"webView.loading" options:NSKeyValueObservingOptionNew context:NULL];
-    [self addObserver:self forKeyPath:@"webView.estimatedProgress" options:NSKeyValueObservingOptionNew context:NULL];
-
-    if (self.request) {
-        [self.webView loadRequest:self.request];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -114,10 +127,6 @@
     self.navigationController.navigationBar.barTintColor = self.savedNavigationbarTintColor;
     [self.navigationController setToolbarHidden:self.toolbarWasHidden];
     self.navigationController.toolbar.barTintColor = self.savedToolbarTintColor;
-
-    [self removeObserver:self forKeyPath:@"webView.title"];
-    [self removeObserver:self forKeyPath:@"webView.loading"];
-    [self removeObserver:self forKeyPath:@"webView.estimatedProgress"];
 }
 
 - (BOOL)prefersStatusBarHidden
